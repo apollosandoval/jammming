@@ -9,24 +9,24 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchResults: [
-        {name, artist, album, id},
-        {name, artist, album, id}
-      ],
+      searchResults: [{
+        name: 'name',
+        artist: 'artist',
+        album: 'album',
+        id: 1
+      }],
       playlistName: 'test playlist',
-      playlistTracks: [
-        {name, artist, album, id}
-      ]
+      playlistTracks: []
     }
   };
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
-        <!-- Add a SearchBar component -->
+        <SearchBar />
         <div className="App-playlist">
           <SearchResults searchResults={this.state.searchResults} />
-          <!-- Add a Playlist component -->
+          <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
         </div>
       </div>
     );
