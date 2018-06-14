@@ -10,47 +10,64 @@ class App extends Component {
     this.state = {
       searchResults: [
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
+          name: 'name1',
+          artist: 'artist1',
+          album: 'album1',
           id: 1
         },
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
+          name: 'name2',
+          artist: 'artist2',
+          album: 'album2',
           id: 2
         },
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
+          name: 'name3',
+          artist: 'artist3',
+          album: 'album3',
           id: 3
         }
-      ],
+      ], // end of searchResults object
       playlistName: 'test playlist',
       playlistTracks: [
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
-          id: 1
+          name: 'name4',
+          artist: 'artist4',
+          album: 'album4',
+          id: 4
         },
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
-          id: 2
+          name: 'name5',
+          artist: 'artist5',
+          album: 'album5',
+          id: 5
         },
         {
-          name: 'name',
-          artist: 'artist',
-          album: 'album',
+          name: 'name3',
+          artist: 'artist3',
+          album: 'album3',
           id: 3
         }
-      ]
+      ] // end of playlistTracks
+    } // end of this.state
+
+    this.addTrack=this.addTrack.bind(this);
+    this.removeTrack=this.removeTrack.bind(this);
+
+  }; // end of constructor method
+  addTrack(track) {
+    if (
+      this.state.playlistTracks.find(savedTrack => savedTrack.id===track.id)
+    ) {
+      return;
     }
-  };
+    this.state.playlistTracks.push(track);
+    this.setState({playlistTracks: this.state.playlistTracks});
+  } // end of addTrack()
+  removeTrack(track) {
+    this.state.playlistTracks = this.state.playlistTracks.filter(savedTrack => savedTrack.id != track.id);
+    this.setState({playlistTracks: this.state.playlistTracks});
+  } // end of removeTrack()
   render() {
     return (
       <div>
@@ -58,8 +75,8 @@ class App extends Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} />
-            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
+            <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults} />
+            <Playlist onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} />
           </div>
         </div>
       </div>
