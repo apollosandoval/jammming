@@ -55,6 +55,7 @@ class App extends Component {
     this.removeTrack=this.removeTrack.bind(this);
     this.updatePlaylistName=this.updatePlaylistName.bind(this);
     this.savePlaylist=this.savePlaylist.bind(this);
+    this.search=this.search.bind(this);
 
   }; // end of constructor method
   addTrack(track) {
@@ -72,16 +73,19 @@ class App extends Component {
   } // end of removeTrack()
   updatePlaylistName(name) {
     this.setState({playlistName: name});
-  } // end of updatePlaylistName
+  } // end of updatePlaylistName()
   savePlaylist() {
     let trackURIs = this.state.playlistTracks.map(track => {return track.uri});
-  } // end of savePlaylist
+  } // end of savePlaylist()
+  search(searchTerm) {
+    console.log(searchTerm);
+  } // end of search()
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar />
+          <SearchBar onSearch={this.search} />
           <div className="App-playlist">
             <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults} />
             <Playlist
