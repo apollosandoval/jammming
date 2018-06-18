@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import SearchBar from '../SearchBar/SearchBar.js'
-import SearchResults from '../SearchResults/SearchResults.js'
-import Playlist from '../Playlist/Playlist.js'
+import SearchBar from '../SearchBar/SearchBar.js';
+import SearchResults from '../SearchResults/SearchResults.js';
+import Playlist from '../Playlist/Playlist.js';
+import Spotify from '../../util/Spotify.js';
 
 class App extends Component {
   constructor(props) {
@@ -78,7 +79,10 @@ class App extends Component {
     let trackURIs = this.state.playlistTracks.map(track => {return track.uri});
   } // end of savePlaylist()
   search(searchTerm) {
-    console.log(searchTerm);
+    Spotify.search(searchTerm).then(searchResults => {
+      this.setState({searchResults: searchResults});
+    });
+    console.log(this.state.searchResults);
   } // end of search()
   render() {
     return (
