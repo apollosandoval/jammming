@@ -1,6 +1,6 @@
 let accessToken = ''; // holds user's access token
 const clientID = 'a81bc212ef65494cbcc4c21042a8df8e'; // developer's clientID
-const redirectURL = 'http://localhost:3000/';
+const redirectURI = 'http://localhost:3000/';
 
 const Spotify = {
   getAccessToken() {
@@ -16,37 +16,31 @@ const Spotify = {
         window.history.pushState('Access Token', null, '/'); // clears parameters from URL so app doesn't try grabbing the access token after it has expired
         return accessToken;
       } else if (!tokenMatch) {
-        const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}`;
+        const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
         window.location = accessUrl;
       }
     }
   }, // end of getAccessToken()
   search(term) {
     const accessToken = Spotify.getAccessToken();
-    fetch('https://api.spotify.com/v1/search?type=track&q=${term}', {
+    const accessEndpoint = `https://api.spotify.com/v1/search?type=track&q=${term}`;
+    const accessHeader = {
       headers: {
-        Authorization: 'Bearer ${accessToken}'
+        Authorization: `Bearer ${accessToken}`
       }
-    }).then(response => {
+    };
+
+    return fetch(accessEndpoint, accessHeader)
+    .then(response => {
       if (response.ok) {
         return response.json();
-      } // converts response object to JSON if response is correct
-    }, networkError => console.log(networkError.message) // handles errors
-  ).then(jsonResponse => { // closes first 'then' call and chains a secondary one
-    if (!jsonResponse.tracks) {
-      return [];
-    }
-    return jsonResponse.tracks.items.map(track => {
-      {
-        ID: track.id,
-        Name: track.name,
-        Artist: track.artists[0].name,
-        Album: track.album.name,
-        URI: track.uri
-      };
-    });
-   // end of 'else' statement
-  }) //end of second then call
+      }
+        throw new Error('Request failed!');
+    }, networkError => console.log(networkError.message))
+    .then(jsonResponse => {
+      //things to do with json response
+      console.log(jsonResponse);
+    })
   } // end of search()
 };
 
