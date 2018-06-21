@@ -47,6 +47,7 @@ class App extends Component {
     })
   } // end of savePlaylist()
   search(searchTerm) {
+    // console.log(searchTerm);
     Spotify.search(searchTerm).then(results => {
       this.setState({searchResults: results});
     });
