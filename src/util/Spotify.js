@@ -55,13 +55,29 @@ const Spotify = {
     if (!playlistName || !trackURIs) {
       return;
     }
-    const accessToken = Spotify.getAccessToken;
+    const accessToken = Spotify.getAccessToken();
     const headers = {Authorization: `Bearer ${accessToken}`};
     let userID;
 
     return fetch('https://api.spotify.com/v1/me', {headers: headers}
   ).then(response => {
     return response.json();
+  }).then(jsonResponse => {
+    userID = jsonResponse.id;
+    return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+      headers: headers,
+      method: 'POST',
+      body: JSON.stringify({name: playlistName})
+    }); // fetch() call to Spotify API to create a playlist
+  }).then(response => {
+    return response.json();
+  }).then(jsonResponse => {
+    let playlistID = jsonResponse.id;
+    return fetch(`https://api.spotify.com/v1/users/${userID}/playlists/${playlistID}/tracks`, {
+      headers: headers,
+      method: 'POST',
+      body: JSON.stringify({uris: trackURIs})
+    });
   })
   } // end of savePlaylist()
 };
